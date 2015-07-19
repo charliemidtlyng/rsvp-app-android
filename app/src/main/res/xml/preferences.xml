@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference android:title="Navn"
+        android:key="currentName" android:inputType="textPersonName"></EditTextPreference>
+
+    <EditTextPreference android:title="Mobilnr"
+        android:key="currentPhone"
+        android:inputType="phone"></EditTextPreference>
+
+    <EditTextPreference android:title="Epost"
+        android:key="currentEmail"
+        android:inputType="textEmailAddress"></EditTextPreference>
+
+</PreferenceScreen>
