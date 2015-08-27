@@ -1,16 +1,24 @@
 package no.charlie.rsvpapp.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import no.charlie.rsvpapp.R;
+import no.charlie.rsvpapp.domain.Event;
 import no.charlie.rsvpapp.domain.EventWrapper;
 import no.charlie.rsvpapp.domain.Participant;
 import no.charlie.rsvpapp.handler.DialogHandler;
+import no.charlie.rsvpapp.service.ApiClient;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by charlie midtlyng on 25/02/15.
@@ -60,8 +68,20 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
         return new Runnable() {
             public void run() {
                 System.out.println("unattended");
-                eventWrapper.participants().remove(position);
-                notifyDataSetChanged();
+                Participant participant = eventWrapper.participants().get(position);
+                ApiClient.getService().removeParticipant(eventWrapper.getEvent().id, participant.id, new Callback<Event>() {
+                    @Override
+                    public void success(Event event, Response response) {
+                        eventWrapper.participants().remove(position);
+                        notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        System.out.println(error.getMessage());
+                        Toast.makeText(context, R.string.unattendFailed, Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         };
     }
@@ -69,7 +89,11 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
     @Override
     public void onBindViewHolder(ParticipantViewHolder holder, int pos) {
         Participant participant = eventWrapper.participants().get(pos);
-        holder.name.setText(participant.name);
+        String name = participant.reserve ? participant.name + "(reserve)" : participant.name;
+        holder.name.setText(name);
+        if(participant.reserve) {
+            holder.name.setTextColor(Color.DKGRAY);
+        }
         holder.position = pos;
     }
 

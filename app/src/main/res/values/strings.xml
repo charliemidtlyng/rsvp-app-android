@@ -2,4 +2,9 @@
     <string name="app_name">BEKK Fotball - Påmelding</string>
 
     <string name="action_settings">Innstillinger</string>
+    <string name="instruction">Skriv inn engangspassord fra sms</string>
+    <string name="registrationFailed">Registreringen feilet - har du skrevet riktig kode?</string>
+    <string name="smsFailed">Sending av engangspassord på sms feilet</string>
+    <string name="unattendFailed">Avmelding feilet</string>
+    <string name="verify">Bekreft</string>
 </resources>

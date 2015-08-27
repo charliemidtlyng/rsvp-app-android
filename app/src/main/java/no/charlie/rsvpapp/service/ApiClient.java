@@ -1,7 +1,5 @@
 package no.charlie.rsvpapp.service;
 
-import com.fatboyindustrial.gsonjodatime.Converters;
-import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
@@ -11,19 +9,12 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.google.gson.internal.bind.DateTypeAdapter;
 
 import org.joda.time.DateTime;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Set;
 
-import no.charlie.rsvpapp.domain.History;
-import no.charlie.rsvpapp.domain.Participant;
 import retrofit.RestAdapter;
 import retrofit.converter.GsonConverter;
 

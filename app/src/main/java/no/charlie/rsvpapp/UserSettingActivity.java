@@ -7,8 +7,6 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 
-import no.charlie.rsvpapp.R;
-
 /**
  * Created by charlie midtlyng on 19/07/15.
  */

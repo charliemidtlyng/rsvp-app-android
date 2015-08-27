@@ -35,5 +35,22 @@ public class DialogHandler {
         dialog.show();
         return true;
     }
+
+    public boolean SimpleAlert(Context context, String Title, String ConfirmText, String OkBtn) {
+        AlertDialog dialog = new AlertDialog.Builder(context).create();
+        dialog.setTitle(Title);
+        dialog.setMessage(ConfirmText);
+        dialog.setCancelable(false);
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, OkBtn,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int buttonId) {
+                        dialog.dismiss();
+                    }
+                });
+        dialog.setIcon(android.R.drawable.ic_dialog_alert);
+        dialog.show();
+        return true;
+    }
+
 }
 

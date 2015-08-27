@@ -1,7 +1,6 @@
 package no.charlie.rsvpapp;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,12 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import no.charlie.rsvpapp.adapters.EventAdapter;
-import no.charlie.rsvpapp.adapters.EventListAdapter;
 import no.charlie.rsvpapp.adapters.ParticipantAdapter;
 import no.charlie.rsvpapp.domain.Event;
 import no.charlie.rsvpapp.domain.EventWrapper;
@@ -31,6 +25,7 @@ public class EventActivity extends ActionBarActivity {
     private RecyclerView eventView;
     private RecyclerView participantView;
     private Long eventId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,10 +88,6 @@ public class EventActivity extends ActionBarActivity {
         ApiClient.getService().findEvent(id, new Callback<Event>() {
             @Override
             public void success(Event event, Response response) {
-                System.out.println("-----------------------------");
-                System.out.println("Fetch event");
-                System.out.println(event);
-                System.out.println(response);
                 EventActivity.this.eventWrapper.setEvent(event);
                 getEventAdapter().notifyDataSetChanged();
                 getParticipantAdapter().notifyDataSetChanged();
@@ -111,5 +102,6 @@ public class EventActivity extends ActionBarActivity {
         });
 
     }
+
 
 }

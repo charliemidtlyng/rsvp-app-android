@@ -44,10 +44,10 @@ public class Event implements Comparable<Event> {
             return "";
         }
         Integer remainingSpots = maxNumber - participants.size();
-        if(remainingSpots>0) {
+        if (remainingSpots > 0) {
             return remainingSpots + " ledig";
         }
-        return "Venteliste";
+        return "Fullt! (reserveliste)";
     }
 
     @Override

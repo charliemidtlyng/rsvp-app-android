@@ -71,8 +71,6 @@ public class EventListActivity extends ActionBarActivity {
         ApiClient.getService().findEvents(new Callback<List<Event>>() {
             @Override
             public void success(List<Event> events, Response response) {
-                System.out.println("-----------------------------");
-                System.out.println("Fetch events");
                 Collections.sort(events);
                 EventListActivity.this.events.clear();
                 EventListActivity.this.events.addAll(events);
