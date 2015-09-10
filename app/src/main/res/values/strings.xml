@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BEKK Fotball - Påmelding</string>
+    <string name="app_name">[BEKK-Fotball] Påmelding</string>
 
     <string name="action_settings">Innstillinger</string>
     <string name="instruction">Skriv inn engangspassord fra sms</string>
