@@ -16,21 +16,21 @@ import static java.util.TimeZone.getTimeZone;
 public class ScheduleNotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED") ||
-                intent.getAction().equals("no.charlie.rsvpapp.APP_STARTED")) {
-            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
-            Calendar calendar = Calendar.getInstance(getTimeZone("GMT+1"));
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.set(Calendar.HOUR_OF_DAY, 8);
-            calendar.set(Calendar.MINUTE, 30);
-            calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-
-            Intent notificationIntent = new Intent(context, NotificationPublisher.class);
-            PendingIntent pendingNotificationIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-            alarmManager.setRepeating(RTC_WAKEUP, calendar.getTimeInMillis(), INTERVAL_DAY * 7, pendingNotificationIntent);
-        }
+//        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED") ||
+//                intent.getAction().equals("no.charlie.rsvpapp.APP_STARTED")) {
+//            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//
+//            Calendar calendar = Calendar.getInstance(getTimeZone("GMT+1"));
+//            calendar.setTimeInMillis(System.currentTimeMillis());
+//            calendar.set(Calendar.HOUR_OF_DAY, 8);
+//            calendar.set(Calendar.MINUTE, 30);
+//            calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+//
+//            Intent notificationIntent = new Intent(context, NotificationPublisher.class);
+//            PendingIntent pendingNotificationIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+//
+//            alarmManager.setRepeating(RTC_WAKEUP, calendar.getTimeInMillis(), INTERVAL_DAY * 7, pendingNotificationIntent);
+//        }
     }
 
 }
