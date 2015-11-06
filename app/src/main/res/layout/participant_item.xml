@@ -16,8 +16,7 @@
         card:cardUseCompatPadding="true"
         card:cardCornerRadius="0dp"
         card:cardBackgroundColor="@android:color/white"
-        card:cardElevation="2sp"
-        >
+        card:cardElevation="2sp">
 
         <LinearLayout
             android:orientation="vertical"
@@ -28,15 +27,14 @@
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:padding="10dp"
-                android:background="#ffe9555f"
-                >
+                android:background="@color/ColorPrimary">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/name"
                     android:text="Navn:"
-                    android:textColor="#FFFFFF" />
+                    android:textColor="@color/secondary_white" />
 
             </RelativeLayout>
         </LinearLayout>

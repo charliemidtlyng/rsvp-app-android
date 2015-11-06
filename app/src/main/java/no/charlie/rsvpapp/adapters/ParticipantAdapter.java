@@ -40,12 +40,7 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
     @Override
     public ParticipantAdapter.ParticipantViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemMessage = inflater.inflate(R.layout.participant_item, parent, false);
-        ParticipantViewHolder holder = new ParticipantViewHolder(itemMessage, createParticipantClickListener());
-        holder.view = itemMessage;
-        holder.name = (TextView) itemMessage.findViewById(R.id.name);
-
-        return holder;
-
+        return new ParticipantViewHolder(itemMessage, createParticipantClickListener());
     }
 
     private ParticipantViewHolder.ParticipantClickListener createParticipantClickListener() {
@@ -89,12 +84,11 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
     @Override
     public void onBindViewHolder(ParticipantViewHolder holder, int pos) {
         Participant participant = eventWrapper.participants().get(pos);
-        String name = participant.reserve ? participant.name + "(reserve)" : participant.name;
+        String name = participant.reserve ? participant.name + "(venteliste)" : participant.name;
         holder.name.setText(name);
-        if(participant.reserve) {
+        if (participant.reserve) {
             holder.name.setTextColor(Color.DKGRAY);
         }
-        holder.position = pos;
     }
 
     @Override
@@ -103,15 +97,13 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
     }
 
     public static class ParticipantViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
-        View view;
         TextView name;
-        int position;
         ParticipantClickListener participantClickListener;
 
         public ParticipantViewHolder(View itemView, ParticipantClickListener participantClickListener) {
             super(itemView);
-            this.view = itemView;
-            view.setOnClickListener(this);
+            name = (TextView) itemView.findViewById(R.id.name);
+            itemView.setOnClickListener(this);
             this.participantClickListener = participantClickListener;
         }
 
