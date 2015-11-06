@@ -4,4 +4,5 @@
     <color name="ColorPrimaryDark">#1A1A1A</color>
     <color name="secondary_white">#ffff</color>
     <color name="secondary_green">#36BDB2</color>
+    <color name="black">#000</color>
 </resources>

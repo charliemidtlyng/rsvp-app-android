@@ -5,8 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import no.charlie.rsvpapp.adapters.EventAdapter;
@@ -14,6 +18,7 @@ import no.charlie.rsvpapp.adapters.ParticipantAdapter;
 import no.charlie.rsvpapp.domain.Event;
 import no.charlie.rsvpapp.domain.EventWrapper;
 import no.charlie.rsvpapp.service.ApiClient;
+import no.charlie.rsvpapp.util.FontResolver;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -25,6 +30,7 @@ public class EventActivity extends ActionBarActivity {
     private RecyclerView eventView;
     private RecyclerView participantView;
     private Long eventId;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +50,22 @@ public class EventActivity extends ActionBarActivity {
 
         eventView.setAdapter(eventAdapter);
         participantView.setAdapter(participantAdapter);
-
-
+        setupToolbar();
     }
 
+    private void setupToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        TextView toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        toolbarTitle.setVisibility(View.VISIBLE);
+        toolbarTitle.setTypeface(FontResolver.getHeaderFont(this));
+        toolbarTitle.setText("Innstillinger");
+        toolbar.setTitle("");
+
+        ImageView toolbarLogo = (ImageView) toolbar.findViewById(R.id.toolbar_logo);
+        toolbarLogo.setVisibility(View.GONE);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

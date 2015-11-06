@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -18,7 +17,6 @@ import java.util.List;
 import no.charlie.rsvpapp.adapters.EventListAdapter;
 import no.charlie.rsvpapp.domain.Event;
 import no.charlie.rsvpapp.service.ApiClient;
-import no.charlie.rsvpapp.util.FontResolver;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -46,9 +44,6 @@ public class EventListActivity extends ActionBarActivity {
 
     private void setupToolbar() {
         toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        TextView toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-        toolbarTitle.setText("BEKK Fotball");
-        toolbarTitle.setTypeface(FontResolver.getHeaderFont(this));
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
     }
