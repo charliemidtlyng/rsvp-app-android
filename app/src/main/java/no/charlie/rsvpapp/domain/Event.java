@@ -31,8 +31,15 @@ public class Event implements Comparable<Event> {
     }
 
     public String day() {
-
         return startTime != null ? startTime.dayOfWeek().getAsText(new Locale("no")) : "";
+    }
+
+    public String month() {
+        return startTime != null ? startTime.monthOfYear().getAsText(new Locale("no")) : "";
+    }
+
+    public String startTime() {
+        return startTime == null ? "" : startTime.toString("HH:mm");
     }
 
     public String startTimeString() {

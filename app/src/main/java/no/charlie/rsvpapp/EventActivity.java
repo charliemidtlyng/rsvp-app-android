@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import no.charlie.rsvpapp.adapters.EventAdapter;
 import no.charlie.rsvpapp.adapters.ParticipantAdapter;
 import no.charlie.rsvpapp.domain.Event;
 import no.charlie.rsvpapp.domain.EventWrapper;
@@ -27,10 +26,15 @@ import retrofit.client.Response;
 public class EventActivity extends ActionBarActivity {
 
     private EventWrapper eventWrapper = new EventWrapper();
-    private RecyclerView eventView;
     private RecyclerView participantView;
     private Long eventId;
     private Toolbar toolbar;
+    private TextView remainingSpots;
+    private TextView date;
+    private TextView locationInfo;
+    private TextView timeInfo;
+    private TextView place;
+    private TextView time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,19 +42,22 @@ public class EventActivity extends ActionBarActivity {
         eventId = (Long) getIntent().getExtras().get("eventId");
         setContentView(R.layout.activity_event);
         final EventActivity context = this;
-        eventView = (RecyclerView) findViewById(R.id.event);
         participantView = (RecyclerView) findViewById(R.id.participants);
-        final LinearLayoutManager layout = new LinearLayoutManager(context);
         final LinearLayoutManager layout2 = new LinearLayoutManager(context);
-        eventView.setLayoutManager(layout);
         participantView.setLayoutManager(layout2);
 
-        final EventAdapter eventAdapter = new EventAdapter(context.getLayoutInflater(), eventWrapper, context);
         final ParticipantAdapter participantAdapter = new ParticipantAdapter(context.getLayoutInflater(), eventWrapper, context);
 
-        eventView.setAdapter(eventAdapter);
         participantView.setAdapter(participantAdapter);
         setupToolbar();
+        setupTopSection();
+    }
+
+    private void setupTopSection() {
+        timeInfo = (TextView) findViewById(R.id.time_info);
+        timeInfo.setTypeface(FontResolver.getHeaderFont(this));
+        locationInfo = (TextView) findViewById(R.id.location_info);
+        locationInfo.setTypeface(FontResolver.getHeaderFont(this));
     }
 
     private void setupToolbar() {
@@ -81,6 +88,10 @@ public class EventActivity extends ActionBarActivity {
             startActivity(i);
             return true;
         }
+        else if (id == android.R.id.home) {
+            supportFinishAfterTransition();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -93,10 +104,6 @@ public class EventActivity extends ActionBarActivity {
     }
 
 
-    private EventAdapter getEventAdapter() {
-        return (EventAdapter) eventView.getAdapter();
-    }
-
     private ParticipantAdapter getParticipantAdapter() {
         return (ParticipantAdapter) participantView.getAdapter();
     }
@@ -107,7 +114,7 @@ public class EventActivity extends ActionBarActivity {
             @Override
             public void success(Event event, Response response) {
                 EventActivity.this.eventWrapper.setEvent(event);
-                getEventAdapter().notifyDataSetChanged();
+                populateEvent(event);
                 getParticipantAdapter().notifyDataSetChanged();
                 setProgressBarIndeterminateVisibility(false);
             }
@@ -121,5 +128,8 @@ public class EventActivity extends ActionBarActivity {
 
     }
 
-
+    private void populateEvent(Event event) {
+        timeInfo.setText(event.day() + " " + event.startTime.dayOfMonth().get() + ". " + event.month() + " KL " + event.startTime());
+        locationInfo.setText(event.location);
+    }
 }

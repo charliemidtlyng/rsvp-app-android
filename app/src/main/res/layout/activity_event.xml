@@ -6,23 +6,60 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:id="@+id/top_section"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp">
+        <ImageView
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/event_image_view"
+            android:src="@drawable/fotballikon"
+            android:transitionName="football_logo"
+            android:layout_marginRight="16dp"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/list_item_text_content"
+            android:layout_toRightOf="@id/event_image_view"
+            android:layout_marginTop="15dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:id="@+id/time_info"
+                android:textColor="@color/secondary_white"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/location_info"
+                android:textSize="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/secondary_white" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Meld på"
+                android:textColor="@color/secondary_green"
+                android:background="@drawable/border_btn"
+                android:layout_marginTop="20dp"
+                android:padding="10dp"
+                android:id="@+id/submit_button"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/participants"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/event"
-            android:layout_width="match_parent"
-            android:layout_height="190dp"
-            android:layout_marginBottom="10dp"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/participants"
-            android:layout_width="match_parent"
-            android:layout_height="fill_parent" />
-
-    </LinearLayout>
+        android:layout_height="fill_parent"
+        android:layout_below="@id/top_section"/>
 
 </RelativeLayout>

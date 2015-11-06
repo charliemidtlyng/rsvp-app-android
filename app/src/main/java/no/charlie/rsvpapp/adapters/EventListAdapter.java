@@ -3,13 +3,13 @@ package no.charlie.rsvpapp.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -18,6 +18,7 @@ import java.util.List;
 import no.charlie.rsvpapp.EventActivity;
 import no.charlie.rsvpapp.R;
 import no.charlie.rsvpapp.domain.Event;
+import no.charlie.rsvpapp.util.FontResolver;
 
 import static android.app.ActivityOptions.makeSceneTransitionAnimation;
 
@@ -30,7 +31,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     private LayoutInflater inflater;
     private List<Event> events;
     private Context context;
-
+    private int lastPosition = -1;
 
     public EventListAdapter(LayoutInflater inflater, List<Event> events, Context context) {
         this.inflater = inflater;
@@ -40,17 +41,17 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
 
     @Override
     public EventListAdapter.EventListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemMessage = inflater.inflate(R.layout.event_item, parent, false);
-        EventListViewHolder eventListHolder = new EventListViewHolder(itemMessage, createEventClickListener());
-        eventListHolder.view = itemMessage;
-        eventListHolder.eventItem = (RelativeLayout) itemMessage.findViewById(R.id.eventItem);
-        eventListHolder.subject = (TextView) itemMessage.findViewById(R.id.subject);
-        eventListHolder.day = (TextView) itemMessage.findViewById(R.id.day);
-        eventListHolder.date = (TextView) itemMessage.findViewById(R.id.date);
-        eventListHolder.remainingSpots = (TextView) itemMessage.findViewById(R.id.remainingSpots);
+        View itemMessage = inflater.inflate(R.layout.event_list_item, parent, false);
+        return new EventListViewHolder(itemMessage, createEventClickListener());
 
-        return eventListHolder;
+    }
 
+    private void setAnimation(View viewToAnimate, int position) {
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
     private EventListViewHolder.EventClickListener createEventClickListener() {
@@ -62,11 +63,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                 Bundle bundle = new Bundle();
                 bundle.putLong("eventId", event.id);
                 intent.putExtras(bundle);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    view.getContext().startActivity(intent, makeSceneTransitionAnimation((Activity) view.getContext()).toBundle());
-                } else {
-                    view.getContext().startActivity(intent);
-                }
+                view.getContext().startActivity(intent, makeSceneTransitionAnimation((Activity) view.getContext(),
+                        view.findViewById(R.id.list_item_image), "football_logo").toBundle());
             }
         };
     }
@@ -74,17 +72,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     @Override
     public void onBindViewHolder(EventListViewHolder holder, int pos) {
         Event event = events.get(pos);
-
         holder.subject.setText(event.subject);
         holder.day.setText(event.day());
         holder.date.setText(event.startTimeString());
-        holder.remainingSpots.setText(event.remainingSpots());
         holder.position = pos;
-        if (event.startTime.isBeforeNow()) {
-            holder.eventItem.setBackgroundColor(Color.DKGRAY);
-        } else {
-            holder.eventItem.setBackgroundColor(0xffe9555f);
-        }
+        setAnimation(holder.itemView, pos);
     }
 
     @Override
@@ -93,17 +85,22 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
     }
 
     public static class EventListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
-        View view;
-        TextView subject, day, date, remainingSpots;
+        TextView subject, day, date;
         int position;
         EventClickListener eventClickListener;
         RelativeLayout eventItem;
 
         public EventListViewHolder(View itemView, EventClickListener eventClickListener) {
             super(itemView);
-            this.view = itemView;
+            day = (TextView) itemView.findViewById(R.id.day);
+            date = (TextView) itemView.findViewById(R.id.date);
+            subject = (TextView) itemView.findViewById(R.id.subject);
+            subject.setTypeface(FontResolver.getHeaderFont(itemView.getContext()));
+            day.setTypeface(FontResolver.getHeaderFont(itemView.getContext()));
+            date.setTypeface(FontResolver.getHeaderFont(itemView.getContext()));
+
             this.eventClickListener = eventClickListener;
-            view.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override
