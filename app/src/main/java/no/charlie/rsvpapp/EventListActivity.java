@@ -1,10 +1,15 @@
 package no.charlie.rsvpapp;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,28 +18,38 @@ import java.util.List;
 import no.charlie.rsvpapp.adapters.EventListAdapter;
 import no.charlie.rsvpapp.domain.Event;
 import no.charlie.rsvpapp.service.ApiClient;
+import no.charlie.rsvpapp.util.FontResolver;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-
-import android.support.v7.widget.*;
-import android.widget.Toast;
 
 
 public class EventListActivity extends ActionBarActivity {
 
     private List<Event> events = new ArrayList<Event>();
     private RecyclerView eventListView;
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_list);
-        final EventListActivity context = this;
+        setupToolbar();
+
         eventListView = (RecyclerView) findViewById(R.id.eventList);
-        final LinearLayoutManager layout = new LinearLayoutManager(context);
+        final LinearLayoutManager layout = new LinearLayoutManager(this);
         eventListView.setLayoutManager(layout);
-        final EventListAdapter eventListAdapter = new EventListAdapter(context.getLayoutInflater(), events, context);
+        final EventListAdapter eventListAdapter = new EventListAdapter(getLayoutInflater(), events, this);
         eventListView.setAdapter(eventListAdapter);
+
+    }
+
+    private void setupToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        TextView toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        toolbarTitle.setTypeface(FontResolver.getHeaderFont(this));
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
     }
 
     @Override
@@ -68,7 +83,7 @@ public class EventListActivity extends ActionBarActivity {
 
     private void fetchEvents() {
         setProgressBarIndeterminateVisibility(true);
-        ApiClient.getService().findEvents(new Callback<List<Event>>() {
+        ApiClient.getService().findUpcomingEvents(new Callback<List<Event>>() {
             @Override
             public void success(List<Event> events, Response response) {
                 Collections.sort(events);
