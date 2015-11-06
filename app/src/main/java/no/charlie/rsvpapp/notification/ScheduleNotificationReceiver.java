@@ -12,7 +12,6 @@ import java.util.Calendar;
 import static android.app.AlarmManager.INTERVAL_DAY;
 import static android.app.AlarmManager.RTC_WAKEUP;
 import static java.util.TimeZone.getTimeZone;
-import static no.charlie.rsvpapp.EventListActivity.createNotification;
 
 public class ScheduleNotificationReceiver extends BroadcastReceiver {
     @Override
@@ -27,17 +26,11 @@ public class ScheduleNotificationReceiver extends BroadcastReceiver {
             calendar.set(Calendar.MINUTE, 30);
             calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
 
-            PendingIntent notificationIntent = notificationIntent(createNotification(context), context);
+            Intent notificationIntent = new Intent(context, NotificationPublisher.class);
+            PendingIntent pendingNotificationIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
-            alarmManager.setRepeating(RTC_WAKEUP, calendar.getTimeInMillis(), INTERVAL_DAY * 7, notificationIntent);
+            alarmManager.setRepeating(RTC_WAKEUP, calendar.getTimeInMillis(), INTERVAL_DAY * 7, pendingNotificationIntent);
         }
-    }
-
-    private PendingIntent notificationIntent(Notification notification, Context context) {
-        Intent notificationIntent = new Intent(context, NotificationPublisher.class);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION_ID, 1);
-        notificationIntent.putExtra(NotificationPublisher.NOTIFICATION, notification);
-        return PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
 }
