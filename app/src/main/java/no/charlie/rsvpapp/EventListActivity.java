@@ -20,6 +20,7 @@ import no.charlie.rsvpapp.notification.NotificationPublisher;
 import no.charlie.rsvpapp.notification.ScheduleNotificationReceiver;
 import no.charlie.rsvpapp.persistence.EventDbHelper;
 import no.charlie.rsvpapp.service.ApiClient;
+import no.charlie.rsvpapp.service.SchedulePollingReceiver;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -48,7 +49,7 @@ public class EventListActivity extends ActionBarActivity {
     }
 
     private void scheduleInitialAlarm() {
-        Intent alarmIntent = new Intent(this, ScheduleNotificationReceiver.class);
+        Intent alarmIntent = new Intent(this, SchedulePollingReceiver.class);
         alarmIntent.setAction("no.charlie.rsvpapp.APP_STARTED");
         try {
             PendingIntent.getBroadcast(this, 0, alarmIntent, 0).send();
