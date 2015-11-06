@@ -1,7 +1,10 @@
 package no.charlie.rsvpapp.domain;
 
+import android.database.Cursor;
+
 import org.joda.time.DateTime;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -58,6 +61,14 @@ public class Event implements Comparable<Event> {
             return 1;
         }
         return startTime.isBefore(another.startTime) ? 1 : -1;
+    }
+
+    public static Event fromCursor(Cursor cursor) {
+        Event event = new Event();
+        event.id = cursor.getLong(0);
+        event.subject = cursor.getString(1);
+        event.startTime = new DateTime(cursor.getLong(2));
+        return event;
     }
 
 }
