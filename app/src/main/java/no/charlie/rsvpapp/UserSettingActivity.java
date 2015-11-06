@@ -4,17 +4,35 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import android.widget.TextView;
+
+import no.charlie.rsvpapp.util.FontResolver;
 
 /**
  * Created by charlie midtlyng on 19/07/15.
  */
-public class UserSettingActivity extends PreferenceActivity {
+public class UserSettingActivity extends ActionBarActivity {
+    private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getFragmentManager().beginTransaction().replace(android.R.id.content, new UserSettingsFragment()).commit();
+        setContentView(R.layout.activity_settings);
+        setupToolbar();
+        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new UserSettingsFragment()).commit();
+    }
+
+    private void setupToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        TextView toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        toolbarTitle.setTypeface(FontResolver.getHeaderFont(this));
+        toolbarTitle.setText("Innstillinger");
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public static class UserSettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {

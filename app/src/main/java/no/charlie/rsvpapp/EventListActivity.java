@@ -47,6 +47,7 @@ public class EventListActivity extends ActionBarActivity {
     private void setupToolbar() {
         toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         TextView toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        toolbarTitle.setText("BEKK Fotball");
         toolbarTitle.setTypeface(FontResolver.getHeaderFont(this));
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
