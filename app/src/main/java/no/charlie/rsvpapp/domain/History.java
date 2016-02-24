@@ -12,7 +12,7 @@ public class History {
     public Change change;
     public String details;
 
-    public static enum Change {
+    public enum Change {
         Register,
         Unregister,
         Update

@@ -1,18 +1,16 @@
 package no.charlie.rsvpapp;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -28,7 +26,7 @@ import retrofit.client.Response;
 import static android.app.ActivityOptions.makeSceneTransitionAnimation;
 
 
-public class VerifyActivity extends ActionBarActivity implements View.OnClickListener {
+public class VerifyActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Long eventId;
     private EditText answer;
@@ -53,7 +51,6 @@ public class VerifyActivity extends ActionBarActivity implements View.OnClickLis
         ApiClient.getService().sendOtp(eventId, postValues, new Callback<Event>() {
             @Override
             public void success(Event event, Response response) {
-
             }
 
             @Override

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -13,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import no.charlie.rsvpapp.R;
@@ -89,20 +87,17 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.remainingSpots.setText(event.remainingSpots());
         holder.place.setText(event.location);
         holder.time.setText(event.startTimeString());
-        holder.position = pos;
     }
 
     @Override
     public int getItemCount() {
-        int count = eventWrapper == null || eventWrapper.getEvent() == null ? 0 : 1;
-        return count;
+        return eventWrapper == null || eventWrapper.getEvent() == null ? 0 : 1;
     }
 
     public static class EventViewHolder extends RecyclerView.ViewHolder {
         View view;
         TextView subject, remainingSpots, place, time;
         Button attend;
-        int position;
 
         public EventViewHolder(View itemView) {
             super(itemView);

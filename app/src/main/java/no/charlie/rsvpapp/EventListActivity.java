@@ -3,7 +3,7 @@ package no.charlie.rsvpapp;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,7 +17,6 @@ import java.util.List;
 import no.charlie.rsvpapp.adapters.CursorEventListAdapter;
 import no.charlie.rsvpapp.domain.Event;
 import no.charlie.rsvpapp.notification.NotificationPublisher;
-import no.charlie.rsvpapp.notification.ScheduleNotificationReceiver;
 import no.charlie.rsvpapp.persistence.EventDbHelper;
 import no.charlie.rsvpapp.service.ApiClient;
 import no.charlie.rsvpapp.service.SchedulePollingReceiver;
@@ -26,7 +25,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
-public class EventListActivity extends ActionBarActivity {
+public class EventListActivity extends AppCompatActivity {
 
     private RecyclerView eventListView;
 

@@ -93,7 +93,7 @@ public class CursorEventListAdapter extends CursorRecyclerViewAdapter<CursorEven
 
         @Override
         public void onClick(View v) {
-            eventClickListener.onClick(v, getPosition());
+            eventClickListener.onClick(v, getAdapterPosition());
         }
 
         public interface EventClickListener {

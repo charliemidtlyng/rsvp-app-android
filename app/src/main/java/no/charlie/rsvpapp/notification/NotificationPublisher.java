@@ -6,13 +6,11 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.util.Log;
 
 import java.util.List;
 
-import no.charlie.rsvpapp.EventListActivity;
 import no.charlie.rsvpapp.R;
 import no.charlie.rsvpapp.VerifyActivity;
 import no.charlie.rsvpapp.domain.Event;
