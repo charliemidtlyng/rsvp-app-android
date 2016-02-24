@@ -7,6 +7,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -39,6 +40,17 @@ public class UserSettingActivity extends ActionBarActivity {
         toolbarLogo.setVisibility(View.GONE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            supportFinishAfterTransition();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public static class UserSettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {

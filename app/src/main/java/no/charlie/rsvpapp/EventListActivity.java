@@ -2,12 +2,13 @@ package no.charlie.rsvpapp;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -24,6 +25,8 @@ import no.charlie.rsvpapp.service.ApiClient;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+import static android.app.ActivityOptions.makeSceneTransitionAnimation;
 
 
 public class EventListActivity extends ActionBarActivity {
@@ -76,7 +79,11 @@ public class EventListActivity extends ActionBarActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(this, UserSettingActivity.class);
-            startActivity(i);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                startActivity(i, makeSceneTransitionAnimation(this).toBundle());
+            } else {
+                startActivity(i);
+            }
             return true;
         }
         if (id == R.id.action_trigger_notification) {

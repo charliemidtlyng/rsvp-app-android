@@ -142,7 +142,11 @@ public class EventActivity extends ActionBarActivity {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             Intent i = new Intent(this, UserSettingActivity.class);
-            startActivity(i);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                startActivity(i, makeSceneTransitionAnimation(this).toBundle());
+            } else {
+                startActivity(i);
+            }
             return true;
         }
         else if (id == android.R.id.home) {
