@@ -6,6 +6,7 @@ package no.charlie.rsvpapp.handler;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 
 public class DialogHandler {
     public Runnable submitProcedure = null;
@@ -15,7 +16,9 @@ public class DialogHandler {
     public boolean Confirm(Context context, String Title, String ConfirmText,
                            String CancelBtn, String OkBtn, Runnable submitMethod) {
         submitProcedure = submitMethod;
-        AlertDialog dialog = new AlertDialog.Builder(context).create();
+        AlertDialog dialog = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
+                new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert).create() :
+                new AlertDialog.Builder(context).create();
         dialog.setTitle(Title);
         dialog.setMessage(ConfirmText);
         dialog.setCancelable(false);
@@ -31,13 +34,14 @@ public class DialogHandler {
                         dialog.dismiss();
                     }
                 });
-        dialog.setIcon(android.R.drawable.ic_dialog_alert);
         dialog.show();
         return true;
     }
 
     public boolean SimpleAlert(Context context, String Title, String ConfirmText, String OkBtn) {
-        AlertDialog dialog = new AlertDialog.Builder(context).create();
+        AlertDialog dialog = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
+                new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert).create() :
+                new AlertDialog.Builder(context).create();
         dialog.setTitle(Title);
         dialog.setMessage(ConfirmText);
         dialog.setCancelable(false);
@@ -47,7 +51,6 @@ public class DialogHandler {
                         dialog.dismiss();
                     }
                 });
-        dialog.setIcon(android.R.drawable.ic_dialog_alert);
         dialog.show();
         return true;
     }

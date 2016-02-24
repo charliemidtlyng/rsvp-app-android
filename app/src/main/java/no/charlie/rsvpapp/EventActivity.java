@@ -193,7 +193,7 @@ public class EventActivity extends ActionBarActivity {
         timeInfo.setText(event.day() + " " + event.startTime.dayOfMonth().get() + ". " + event.month() + " KL " + event.startTime());
         locationInfo.setText(event.location);
         int numberOnWaitingList = event.participants.size() - event.maxNumber;
-        waitingListContent.setText("" + numberOnWaitingList);
+        waitingListContent.setText("" + (numberOnWaitingList > 0 ? numberOnWaitingList : 0));
         int signedUp = event.participants.size() <= event.maxNumber ? event.participants.size() : event.maxNumber;
         signedUpContent.setText("" + signedUp);
     }
