@@ -1,22 +1,31 @@
 package no.charlie.rsvpapp;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.security.Permission;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,10 +40,14 @@ import static android.app.ActivityOptions.makeSceneTransitionAnimation;
 
 
 public class VerifyActivity extends ActionBarActivity implements View.OnClickListener {
+    public static final String OTP_RECEIVED_ACTION = "no.charlie.rsvpapp.OTP_RECEIVED";
+    private static final int MY_PERMISSIONS_REQUEST_READ_SMS = 1;
 
     private Long eventId;
     private EditText answer;
     private Toolbar toolbar;
+    private Button verifyButton;
+    private BroadcastReceiver otpBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +56,45 @@ public class VerifyActivity extends ActionBarActivity implements View.OnClickLis
         setContentView(R.layout.activity_captcha);
         setupToolbar();
         this.answer = (EditText) this.findViewById(R.id.answer);
+        this.verifyButton = (Button) this.findViewById(R.id.verify);
 
-        this.findViewById(R.id.verify).setOnClickListener(this);
-        this.sendOtp();
+        verifyButton.setOnClickListener(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int permissionCheck = ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.READ_SMS);
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_SMS},
+                        MY_PERMISSIONS_REQUEST_READ_SMS);
+            }
+            else {
+                this.sendOtp();
+            }
+        }
+        else {
+            this.sendOtp();
+        }
+        otpBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals(OTP_RECEIVED_ACTION)) {
+                    String otp = intent.getStringExtra("otp");
+                    answer.setText(otp);
+                    verifyButton.performClick();
+                }
+            }
+        };
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_SMS: {
+                this.sendOtp();
+                return;
+            }
+        }
     }
 
     private void setupToolbar() {
@@ -106,6 +155,14 @@ public class VerifyActivity extends ActionBarActivity implements View.OnClickLis
     @Override
     protected void onResume() {
         super.onResume();
+        IntentFilter intentFilter = new IntentFilter(OTP_RECEIVED_ACTION);
+        registerReceiver(otpBroadcastReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(otpBroadcastReceiver);
     }
 
     @Override
