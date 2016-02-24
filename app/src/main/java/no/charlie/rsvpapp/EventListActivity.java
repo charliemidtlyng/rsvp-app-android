@@ -4,7 +4,9 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +28,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import static android.text.TextUtils.isEmpty;
 import static no.charlie.rsvpapp.notification.NotificationPublisher.scheduleNotificationFor;
 
 
@@ -51,6 +54,17 @@ public class EventListActivity extends AppCompatActivity {
 
         alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         scheduleInitialAlarm();
+        ensureNameAndPhoneSet();
+    }
+
+    private void ensureNameAndPhoneSet() {
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String name = SP.getString("currentName", null);
+        String phone = SP.getString("currentPhone", null);
+        if (isEmpty(name) || isEmpty(phone)) {
+            Intent i = new Intent(this, UserSettingActivity.class);
+            startActivity(i);
+        }
     }
 
     private void scheduleInitialAlarm() {
