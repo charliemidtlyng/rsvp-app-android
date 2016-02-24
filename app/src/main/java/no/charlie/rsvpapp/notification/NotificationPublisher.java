@@ -1,48 +1,35 @@
 package no.charlie.rsvpapp.notification;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.util.Log;
 
-import java.util.List;
-
-import no.charlie.rsvpapp.EventListActivity;
 import no.charlie.rsvpapp.R;
 import no.charlie.rsvpapp.VerifyActivity;
 import no.charlie.rsvpapp.domain.Event;
-import no.charlie.rsvpapp.service.ApiClient;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+
+import static android.app.AlarmManager.RTC_WAKEUP;
 
 public class NotificationPublisher extends BroadcastReceiver {
 
-    public void onReceive(Context context, Intent intent) {
-        getEventsAndTriggerNotifications(context);
+    public static void scheduleNotificationFor(Event event, Context context, AlarmManager alarmManager) {
+        Intent notificationIntent = new Intent(context, NotificationPublisher.class);
+        notificationIntent.putExtra("event", event);
+        PendingIntent pendingNotificationIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        Log.d("RSVP-app", "Scheduling notification at " + event.regStartString());
+        alarmManager.setExact(RTC_WAKEUP, event.regStart.getMillis(), pendingNotificationIntent);
     }
 
-    public static void getEventsAndTriggerNotifications(final Context context) {
-        ApiClient.getService().findUpcomingEvents(new Callback<List<Event>>() {
-            @Override
-            public void success(List<Event> events, Response response) {
-                for (Event event : events) {
-                    if (event.regStart.isBeforeNow()) {
-                        createNotification(context, event);
-                    }
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.d(getClass().getName(), "An error occured when retrieving events.");
-            }
-        });
+    public void onReceive(Context context, Intent intent) {
+        Event event = (Event) intent.getSerializableExtra("event");
+        createNotification(context, event);
     }
 
     private static void createNotification(Context context, Event event) {
@@ -60,12 +47,9 @@ public class NotificationPublisher extends BroadcastReceiver {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .addAction(meldPåAction)
                 .build();
-        triggerNotification(context, notification, event.id.intValue());
-    }
 
-    private static void triggerNotification(Context context, Notification notification, int id) {
         NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotifyMgr.notify(id, notification);
+        mNotifyMgr.notify(event.id.intValue(), notification);
     }
 
 }

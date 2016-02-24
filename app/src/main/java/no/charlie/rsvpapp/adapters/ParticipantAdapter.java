@@ -108,7 +108,7 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
 
         @Override
         public void onClick(View view) {
-            participantClickListener.onClick(view, getPosition());
+            participantClickListener.onClick(view, getAdapterPosition());
         }
 
         @Override

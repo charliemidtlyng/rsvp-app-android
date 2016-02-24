@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import no.charlie.rsvpapp.R;
@@ -45,6 +44,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     @Override
     public EventAdapter.EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemMessage = inflater.inflate(R.layout.event_details, parent, false);
+        final Event event = eventWrapper.getEvent();
 
         EventViewHolder eventHolder = new EventViewHolder(itemMessage);
         eventHolder.view = itemMessage;
@@ -53,31 +53,40 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         eventHolder.place = (TextView) itemMessage.findViewById(R.id.place);
         eventHolder.time = (TextView) itemMessage.findViewById(R.id.time);
         eventHolder.attend = (Button) itemMessage.findViewById(R.id.attend);
-        eventHolder.attend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
-                String name = SP.getString("currentName", null);
-                String phone = SP.getString("currentPhone", null);
-                Context context = view.getContext();
-                if (isEmpty(name)) {
-                    missingProperties("Legg til navn i innstillinger", context);
-                } else if (isEmpty(phone)) {
-                    missingProperties("Legg til mobilnr i innstillinger (pga verifisering)", context);
-                } else {
-                    Intent intent = new Intent(context, VerifyActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putLong("eventId", eventWrapper.getEvent().id);
-                    intent.putExtras(bundle);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        context.startActivity(intent, makeSceneTransitionAnimation((Activity) context).toBundle());
+        if (event.registrationIsOpen()) {
+            eventHolder.attend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
+                    String name = SP.getString("currentName", null);
+                    String phone = SP.getString("currentPhone", null);
+                    Context context = view.getContext();
+                    if (isEmpty(name)) {
+                        missingProperties("Legg til navn i innstillinger", context);
+                    } else if (isEmpty(phone)) {
+                        missingProperties("Legg til mobilnr i innstillinger (pga verifisering)", context);
                     } else {
-                        context.startActivity(intent);
+                        Intent intent = new Intent(context, VerifyActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putLong("eventId", event.id);
+                        intent.putExtras(bundle);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            context.startActivity(intent, makeSceneTransitionAnimation((Activity) context).toBundle());
+                        } else {
+                            context.startActivity(intent);
+                        }
                     }
-                }
 
+                }
+            });
+        } else {
+            eventHolder.attend.setBackgroundColor(Color.DKGRAY);
+            if (event.regStart.isAfterNow()) {
+                eventHolder.attend.setText(context.getString(R.string.registration_not_yet_opened, event.regStartString()));
+            } else {
+                eventHolder.attend.setText(R.string.registration_closed);
             }
-        });
+        }
         return eventHolder;
 
     }
@@ -89,20 +98,17 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         holder.remainingSpots.setText(event.remainingSpots());
         holder.place.setText(event.location);
         holder.time.setText(event.startTimeString());
-        holder.position = pos;
     }
 
     @Override
     public int getItemCount() {
-        int count = eventWrapper == null || eventWrapper.getEvent() == null ? 0 : 1;
-        return count;
+        return eventWrapper == null || eventWrapper.getEvent() == null ? 0 : 1;
     }
 
     public static class EventViewHolder extends RecyclerView.ViewHolder {
         View view;
         TextView subject, remainingSpots, place, time;
         Button attend;
-        int position;
 
         public EventViewHolder(View itemView) {
             super(itemView);

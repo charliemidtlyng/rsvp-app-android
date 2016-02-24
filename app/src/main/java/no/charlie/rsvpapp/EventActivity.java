@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -32,8 +34,7 @@ import retrofit.client.Response;
 import static android.app.ActivityOptions.makeSceneTransitionAnimation;
 import static android.text.TextUtils.isEmpty;
 
-
-public class EventActivity extends ActionBarActivity {
+public class EventActivity extends AppCompatActivity {
 
     private EventWrapper eventWrapper = new EventWrapper();
     private RecyclerView participantView;
