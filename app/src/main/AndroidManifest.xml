@@ -33,12 +33,6 @@
             android:parentActivityName=".EventActivity">
         </activity>
         <receiver android:name=".notification.NotificationPublisher" />
-        <receiver android:name=".notification.ScheduleNotificationReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="no.charlie.rsvpapp.APP_STARTED"/>
-            </intent-filter>
-        </receiver>
         <receiver android:name=".service.SchedulePollingReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
