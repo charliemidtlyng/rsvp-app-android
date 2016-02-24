@@ -4,13 +4,14 @@ import android.database.Cursor;
 
 import org.joda.time.DateTime;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 
 /**
  * Created by charlie midtlyng on 25/02/15.
  */
-public class Event implements Comparable<Event> {
+public class Event implements Comparable<Event>, Serializable {
 
     public Long id;
     public DateTime startTime;

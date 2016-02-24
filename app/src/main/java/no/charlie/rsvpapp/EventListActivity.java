@@ -1,6 +1,8 @@
 package no.charlie.rsvpapp;
 
+import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,13 +18,15 @@ import java.util.List;
 
 import no.charlie.rsvpapp.adapters.CursorEventListAdapter;
 import no.charlie.rsvpapp.domain.Event;
-import no.charlie.rsvpapp.notification.NotificationPublisher;
 import no.charlie.rsvpapp.persistence.EventDbHelper;
+import no.charlie.rsvpapp.persistence.EventDbHelper.CreationResult;
 import no.charlie.rsvpapp.service.ApiClient;
 import no.charlie.rsvpapp.service.SchedulePollingReceiver;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+import static no.charlie.rsvpapp.notification.NotificationPublisher.scheduleNotificationFor;
 
 
 public class EventListActivity extends AppCompatActivity {
@@ -30,6 +34,7 @@ public class EventListActivity extends AppCompatActivity {
     private RecyclerView eventListView;
 
     private EventDbHelper db;
+    private AlarmManager alarmManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,7 @@ public class EventListActivity extends AppCompatActivity {
         CursorEventListAdapter eventListAdapter = new CursorEventListAdapter(db.list(), context.getLayoutInflater());
         eventListView.setAdapter(eventListAdapter);
 
+        alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         scheduleInitialAlarm();
     }
 
@@ -72,11 +78,6 @@ public class EventListActivity extends AppCompatActivity {
             startActivity(i);
             return true;
         }
-        if (id == R.id.action_trigger_notification) {
-            NotificationPublisher.getEventsAndTriggerNotifications(this);
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -98,7 +99,10 @@ public class EventListActivity extends AppCompatActivity {
             public void success(List<Event> events, Response response) {
                 Collections.sort(events);
                 for (Event event : events) {
-                    db.create(event);
+                    CreationResult result = db.create(event);
+                    if (result == CreationResult.CREATED) {
+                        scheduleNotificationFor(event, getApplicationContext(), alarmManager);
+                    }
                 }
                 getAdapter().changeCursor(db.list());
                 setProgressBarIndeterminateVisibility(false);

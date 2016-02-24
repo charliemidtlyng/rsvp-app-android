@@ -9,6 +9,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import no.charlie.rsvpapp.domain.Event;
 
+import static no.charlie.rsvpapp.persistence.EventDbHelper.CreationResult.ALREADY_EXISTS;
+import static no.charlie.rsvpapp.persistence.EventDbHelper.CreationResult.CREATED;
+import static no.charlie.rsvpapp.persistence.EventDbHelper.CreationResult.ERROR;
+
 public class EventDbHelper extends SQLiteOpenHelper {
 
     public static final int DATABASE_VERSION = 1;
@@ -28,9 +32,9 @@ public class EventDbHelper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public void create(Event event) {
+    public CreationResult create(Event event) {
         if (eventExists(event.id)) {
-            return;
+            return ALREADY_EXISTS;
         }
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -39,7 +43,14 @@ public class EventDbHelper extends SQLiteOpenHelper {
         values.put("start_time", event.startTime.getMillis());
         values.put("reg_start", event.regStart.getMillis());
         values.put("reg_end", event.regEnd.getMillis());
-        db.insertOrThrow("event", null, values);
+        long result = db.insertOrThrow("event", null, values);
+        return result == -1 ? ERROR : CREATED;
+    }
+
+    public enum CreationResult {
+        ALREADY_EXISTS,
+        CREATED,
+        ERROR
     }
 
     private boolean eventExists(long eventId) {

@@ -13,7 +13,6 @@ import static android.app.AlarmManager.RTC;
 public class SchedulePollingReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.w(getClass().getName(), "yeah");
         if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED") ||
                 intent.getAction().equals("no.charlie.rsvpapp.APP_STARTED")) {
             Log.w(getClass().getName(), intent.getAction());
