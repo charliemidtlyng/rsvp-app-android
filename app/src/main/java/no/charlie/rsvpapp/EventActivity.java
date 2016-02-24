@@ -2,7 +2,7 @@ package no.charlie.rsvpapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -19,7 +19,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
-public class EventActivity extends ActionBarActivity {
+public class EventActivity extends AppCompatActivity {
 
     private EventWrapper eventWrapper = new EventWrapper();
     private RecyclerView eventView;

@@ -1,7 +1,6 @@
 package no.charlie.rsvpapp.adapters;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -94,7 +93,6 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
         if(participant.reserve) {
             holder.name.setTextColor(Color.DKGRAY);
         }
-        holder.position = pos;
     }
 
     @Override
@@ -105,7 +103,6 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
     public static class ParticipantViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         View view;
         TextView name;
-        int position;
         ParticipantClickListener participantClickListener;
 
         public ParticipantViewHolder(View itemView, ParticipantClickListener participantClickListener) {
@@ -117,7 +114,7 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
 
         @Override
         public void onClick(View view) {
-            participantClickListener.onClick(view, getPosition());
+            participantClickListener.onClick(view, getAdapterPosition());
         }
 
         @Override
@@ -127,7 +124,7 @@ public class ParticipantAdapter extends RecyclerView.Adapter<ParticipantAdapter.
         }
 
         public interface ParticipantClickListener {
-            public void onClick(View view, int position);
+            void onClick(View view, int position);
         }
 
     }
