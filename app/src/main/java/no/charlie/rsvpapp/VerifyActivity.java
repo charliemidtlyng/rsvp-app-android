@@ -1,19 +1,20 @@
 package no.charlie.rsvpapp;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import java.util.Map;
 
 import no.charlie.rsvpapp.domain.Event;
 import no.charlie.rsvpapp.service.ApiClient;
+import no.charlie.rsvpapp.util.FontResolver;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -32,17 +34,32 @@ public class VerifyActivity extends ActionBarActivity implements View.OnClickLis
 
     private Long eventId;
     private EditText answer;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         eventId = (Long) getIntent().getExtras().get("eventId");
         setContentView(R.layout.activity_captcha);
-
+        setupToolbar();
         this.answer = (EditText) this.findViewById(R.id.answer);
 
         this.findViewById(R.id.verify).setOnClickListener(this);
         this.sendOtp();
+    }
+
+    private void setupToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        TextView toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+        toolbarTitle.setVisibility(View.VISIBLE);
+        toolbarTitle.setTypeface(FontResolver.getHeaderFont(this));
+        toolbarTitle.setText("Verifisering");
+        toolbar.setTitle("");
+
+        ImageView toolbarLogo = (ImageView) toolbar.findViewById(R.id.toolbar_logo);
+        toolbarLogo.setVisibility(View.GONE);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void sendOtp() {
@@ -64,7 +81,6 @@ public class VerifyActivity extends ActionBarActivity implements View.OnClickLis
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_event_list, menu);
@@ -79,7 +95,10 @@ public class VerifyActivity extends ActionBarActivity implements View.OnClickLis
             startActivity(i);
             return true;
         }
-
+        else if (id == android.R.id.home) {
+            supportFinishAfterTransition();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
