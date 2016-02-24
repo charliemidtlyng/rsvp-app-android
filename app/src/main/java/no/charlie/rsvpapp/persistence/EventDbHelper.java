@@ -19,7 +19,9 @@ public class EventDbHelper extends SQLiteOpenHelper {
             "CREATE TABLE event (" +
                     "id INTEGER PRIMARY KEY, " +
                     "title TEXT," +
-                    "start_time INTEGER" +
+                    "start_time INTEGER," +
+                    "reg_start INTEGER," +
+                    "reg_end INTEGER" +
                     ");";
 
     public EventDbHelper(Context context) {
@@ -35,6 +37,8 @@ public class EventDbHelper extends SQLiteOpenHelper {
         values.put("id", event.id);
         values.put("title", event.subject);
         values.put("start_time", event.startTime.getMillis());
+        values.put("reg_start", event.regStart.getMillis());
+        values.put("reg_end", event.regEnd.getMillis());
         db.insertOrThrow("event", null, values);
     }
 
@@ -45,7 +49,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
     public Cursor list() {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.query("event", new String[]{"id", "title", "start_time"}, null, null, null, null, "start_time DESC");
+        return db.query("event", new String[]{"id", "title", "start_time", "reg_start", "reg_end"}, null, null, null, null, "start_time DESC");
     }
 
     @Override

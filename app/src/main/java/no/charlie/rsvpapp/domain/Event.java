@@ -4,7 +4,6 @@ import android.database.Cursor;
 
 import org.joda.time.DateTime;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,6 +41,10 @@ public class Event implements Comparable<Event> {
         return startTime == null ? "" : startTime.toString("yyyy-MM-dd HH:mm");
     }
 
+    public String regStartString() {
+        return regStart == null ? "" : regStart.toString("yyyy-MM-dd HH:mm");
+    }
+
     public String remainingSpots() {
         if (maxNumber == null || participants == null) {
             return "";
@@ -51,6 +54,10 @@ public class Event implements Comparable<Event> {
             return remainingSpots + " ledig";
         }
         return "Fullt! (reserveliste)";
+    }
+
+    public boolean registrationIsOpen() {
+        return regStart.isBeforeNow() && regEnd.isAfterNow();
     }
 
     @Override
@@ -68,6 +75,8 @@ public class Event implements Comparable<Event> {
         event.id = cursor.getLong(0);
         event.subject = cursor.getString(1);
         event.startTime = new DateTime(cursor.getLong(2));
+        event.regStart = new DateTime(cursor.getLong(3));
+        event.regEnd = new DateTime(cursor.getLong(4));
         return event;
     }
 

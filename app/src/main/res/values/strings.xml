@@ -7,4 +7,6 @@
     <string name="smsFailed">Sending av engangspassord på sms feilet</string>
     <string name="unattendFailed">Avmelding feilet</string>
     <string name="verify">Bekreft</string>
+    <string name="registration_closed">Påmeldingen er stengt</string>
+    <string name="registration_not_yet_opened">Påmeldingen åpner %s</string>
 </resources>

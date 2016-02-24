@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -43,6 +44,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     @Override
     public EventAdapter.EventViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemMessage = inflater.inflate(R.layout.event_details, parent, false);
+        final Event event = eventWrapper.getEvent();
 
         EventViewHolder eventHolder = new EventViewHolder(itemMessage);
         eventHolder.view = itemMessage;
@@ -51,31 +53,40 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
         eventHolder.place = (TextView) itemMessage.findViewById(R.id.place);
         eventHolder.time = (TextView) itemMessage.findViewById(R.id.time);
         eventHolder.attend = (Button) itemMessage.findViewById(R.id.attend);
-        eventHolder.attend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
-                String name = SP.getString("currentName", null);
-                String phone = SP.getString("currentPhone", null);
-                Context context = view.getContext();
-                if (isEmpty(name)) {
-                    missingProperties("Legg til navn i innstillinger", context);
-                } else if (isEmpty(phone)) {
-                    missingProperties("Legg til mobilnr i innstillinger (pga verifisering)", context);
-                } else {
-                    Intent intent = new Intent(context, VerifyActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putLong("eventId", eventWrapper.getEvent().id);
-                    intent.putExtras(bundle);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        context.startActivity(intent, makeSceneTransitionAnimation((Activity) context).toBundle());
+        if (event.registrationIsOpen()) {
+            eventHolder.attend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
+                    String name = SP.getString("currentName", null);
+                    String phone = SP.getString("currentPhone", null);
+                    Context context = view.getContext();
+                    if (isEmpty(name)) {
+                        missingProperties("Legg til navn i innstillinger", context);
+                    } else if (isEmpty(phone)) {
+                        missingProperties("Legg til mobilnr i innstillinger (pga verifisering)", context);
                     } else {
-                        context.startActivity(intent);
+                        Intent intent = new Intent(context, VerifyActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putLong("eventId", event.id);
+                        intent.putExtras(bundle);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            context.startActivity(intent, makeSceneTransitionAnimation((Activity) context).toBundle());
+                        } else {
+                            context.startActivity(intent);
+                        }
                     }
-                }
 
+                }
+            });
+        } else {
+            eventHolder.attend.setBackgroundColor(Color.DKGRAY);
+            if (event.regStart.isAfterNow()) {
+                eventHolder.attend.setText(context.getString(R.string.registration_not_yet_opened, event.regStartString()));
+            } else {
+                eventHolder.attend.setText(R.string.registration_closed);
             }
-        });
+        }
         return eventHolder;
 
     }
