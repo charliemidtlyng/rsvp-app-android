@@ -38,6 +38,7 @@ public class EventActivity extends ActionBarActivity {
     private EventWrapper eventWrapper = new EventWrapper();
     private RecyclerView participantView;
     private Long eventId;
+    private String subject;
     private Toolbar toolbar;
     private TextView locationInfo;
     private TextView timeInfo;
@@ -51,6 +52,7 @@ public class EventActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         eventId = (Long) getIntent().getExtras().get("eventId");
+        subject = (String) getIntent().getExtras().get("subject");
         setContentView(R.layout.activity_event);
         final EventActivity context = this;
         participantView = (RecyclerView) findViewById(R.id.participants);
@@ -120,7 +122,7 @@ public class EventActivity extends ActionBarActivity {
         TextView toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         toolbarTitle.setVisibility(View.VISIBLE);
         toolbarTitle.setTypeface(FontResolver.getHeaderFont(this));
-        toolbarTitle.setText("Innstillinger");
+        toolbarTitle.setText(subject);
         toolbar.setTitle("");
 
         ImageView toolbarLogo = (ImageView) toolbar.findViewById(R.id.toolbar_logo);

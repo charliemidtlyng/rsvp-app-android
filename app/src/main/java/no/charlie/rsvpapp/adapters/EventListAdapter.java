@@ -62,8 +62,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.Even
                 Intent intent = new Intent(view.getContext(), EventActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putLong("eventId", event.id);
+                bundle.putString("subject", event.subject);
                 intent.putExtras(bundle);
-                view.getContext().startActivity(intent, makeSceneTransitionAnimation((Activity) view.getContext(),
+                view.getContext().startActivity(intent, makeSceneTransitionAnimation((Activity) context,
                         view.findViewById(R.id.list_item_image), "football_logo").toBundle());
             }
         };
