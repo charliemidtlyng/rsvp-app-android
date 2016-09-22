@@ -60,7 +60,7 @@ public class EventDbHelper extends SQLiteOpenHelper {
 
     public Cursor list() {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.query("event", new String[]{"id", "title", "start_time", "reg_start", "reg_end"}, null, null, null, null, "start_time DESC");
+        return db.query("event", new String[]{"id", "title", "start_time", "reg_start", "reg_end"}, null, null, null, null, "start_time ASC");
     }
 
     @Override
