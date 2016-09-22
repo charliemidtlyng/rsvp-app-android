@@ -60,7 +60,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
                     SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(context);
                     String name = SP.getString("currentName", null);
                     String phone = SP.getString("currentPhone", null);
-                    Context context = view.getContext();
                     if (isEmpty(name)) {
                         missingProperties("Legg til navn i innstillinger", context);
                     } else if (isEmpty(phone)) {

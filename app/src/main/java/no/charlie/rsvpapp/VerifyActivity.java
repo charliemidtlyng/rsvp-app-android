@@ -58,6 +58,7 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void failure(RetrofitError error) {
                 Toast.makeText(getApplicationContext(), R.string.smsFailed, Toast.LENGTH_SHORT).show();
+                Log.w(getLocalClassName(), "Sending av engangspassord feilet", error);
             }
         });
 
@@ -122,7 +123,7 @@ public class VerifyActivity extends AppCompatActivity implements View.OnClickLis
                 @Override
                 public void failure(RetrofitError error) {
                     String errorMessage = new String(((TypedByteArray) error.getResponse().getBody()).getBytes());
-                    Log.w(getClass().getName(), "Registration failed, message from server: " + errorMessage);
+                    Log.w(getClass().getName(), "Registration failed, message from server: " + errorMessage, error);
                     Toast.makeText(view.getContext(), R.string.registrationFailed, Toast.LENGTH_SHORT).show();
                 }
             });
